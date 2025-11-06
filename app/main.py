@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -8,12 +9,24 @@ load_dotenv()
 
 app = FastAPI(title="Pitulung Backend")
 
-# CORS middleware
+# CORS middleware - only allow pitulung.com
+allowed_origins = [
+    "https://pitulung.com",
+    "https://www.pitulung.com",
+]
+
+# Add localhost for development if needed
+if os.getenv("ENVIRONMENT") == "development":
+    allowed_origins.extend([
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
