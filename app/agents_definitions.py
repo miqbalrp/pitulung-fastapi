@@ -1,4 +1,4 @@
-from app.schemas import EditResponse
+from app.schemas import EditResponse, QuizResponse
 
 def create_grammar_agent(agent_factory):
     return agent_factory(
@@ -32,4 +32,20 @@ def create_tone_agent(agent_factory, tone: str):
             "Do not change the meaning. Keep vocabulary level and style consistent with the original writer unless tone requires otherwise."
         ),
         output_type=EditResponse
+    )
+
+def create_quiz_agent(agent_factory):
+    return agent_factory(
+        name="Quiz Generator",
+        instructions=(
+            "You are a quiz generation assistant. Create multiple-choice quizzes based on the grammar corrections and comments provided. "
+            "Generate 3 multiple-choice questions (with options A, B, C) that help users understand the grammar rules that were corrected. "
+            "For each question:\n"
+            "1. Ask about the grammar concept that was corrected\n"
+            "2. Provide 3 answer options (A, B, C)\n"
+            "3. Clearly indicate which option is correct\n"
+            "4. Briefly explain why the correct answer is right\n"
+            "Format output as JSON matching the QuizResponse schema."
+        ),
+        output_type=QuizResponse
     )

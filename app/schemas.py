@@ -18,3 +18,23 @@ class EditResponse(BaseModel):
         None, 
         description="Clear and educative comments or suggestions regarding the edits made, formatted in markdown."
     )
+
+class QuizOption(BaseModel):
+    A: str
+    B: str
+    C: str
+
+
+class QuizQuestion(BaseModel):
+    question: str = Field(..., description="The quiz question")
+    options: QuizOption = Field(..., description="The answer options for the quiz question")
+    correct_answer: str = Field(..., description="The correct answer option: 'A', 'B', or 'C'")
+    explanation: str = Field(..., description="Explanation for the correct answer")
+
+class QuizResponse(BaseModel):
+    questions: List[QuizQuestion]
+    total_questions: int
+
+class QuizRequest(BaseModel):
+    comments: str
+    original_text: str
