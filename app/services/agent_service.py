@@ -48,11 +48,11 @@ class AgentService:
                 comments["tone"] = res.comments or ""
 
         return current_text, comments
-    
-    async def run_quiz_from_grammar(self, grammar_comments: str, original_text: str) -> QuizResponse:
+
+    async def run_quiz_from_grammar(self, grammar_comments: str, original_text: str, number_of_questions: int=5) -> QuizResponse:
         """Generate quiz based on grammar agent's comments"""
         agent = create_quiz_agent(self.agent_factory)
-        res = await self.run_agent(agent, f"Original text: {original_text}\n\nGrammar corrections: {grammar_comments}\n\nGenerate 3 quiz questions.")
+        res = await self.run_agent(agent, f"Original text: {original_text}\n\nGrammar corrections: {grammar_comments}\n\nGenerate {number_of_questions} quiz questions.")
         return res
 
 _service: Optional[AgentService] = None
