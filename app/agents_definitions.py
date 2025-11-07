@@ -1,4 +1,4 @@
-from app.schemas import EditResponse, QuizResponse
+from app.schemas import *
 
 def create_grammar_agent(agent_factory):
     return agent_factory(
@@ -49,4 +49,14 @@ def create_quiz_agent(agent_factory):
             "Format output as JSON matching the QuizResponse schema."
         ),
         output_type=QuizResponse
+    )
+
+def create_chat_agent(agent_factory):
+    return agent_factory(
+        name="Chat Agent",
+        instructions=(
+            "You are a chat assistant named Pitulung. "
+            "Engage in a conversation with the user, providing helpful responses and asking clarifying questions as needed."
+        ),
+        output_type=ChatResponse
     )

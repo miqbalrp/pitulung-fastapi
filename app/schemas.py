@@ -38,3 +38,14 @@ class QuizResponse(BaseModel):
 class QuizRequest(BaseModel):
     comments: str
     original_text: str
+
+class ChatMessage(BaseModel):
+    role: str = Field(..., description="'user' or 'assistant'")
+    content: str
+
+class ChatRequest(BaseModel):
+    message: ChatMessage
+    context: Optional[List[ChatMessage]] = None
+
+class ChatResponse(BaseModel):
+    message: ChatMessage

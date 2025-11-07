@@ -1,13 +1,7 @@
 from typing import Callable, Optional
 from pydantic import BaseModel
-from app.agents_definitions import (
-    EditResponse, 
-    QuizResponse,
-    create_grammar_agent, 
-    create_clarity_agent, 
-    create_tone_agent, 
-    create_quiz_agent
-)
+from app.agents_definitions import *
+from app.schemas import *
 
 # Import the project's Agent/Runner implementation. Keep this import local so we can
 # shim or mock it in tests if needed.
@@ -54,6 +48,19 @@ class AgentService:
         agent = create_quiz_agent(self.agent_factory)
         res = await self.run_agent(agent, f"Original text: {original_text}\n\nGrammar corrections: {grammar_comments}\n\nGenerate {number_of_questions} quiz questions.")
         return res
+    
+    async def process_chat_request(self, request: ChatRequest) -> ChatResponse:
+        agent = create_chat_agent(self.agent_factory)
+        # Prepare the input text by combining context and the new message
+        messages = []
+        if request.context:
+            for msg in request.context:
+                messages.append(f"{msg.role}: {msg.content}")
+        messages.append(f"{request.message.role}: {request.message.content}")
+        input_text = "\n".join(messages)
+
+        res = await self.run_agent(agent, input_text)
+        return ChatResponse(message=res.message)
 
 _service: Optional[AgentService] = None
 
